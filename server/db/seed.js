@@ -153,7 +153,16 @@ async function assignInitialUsersToProjects() {
     }
 }
 
+async function createInitialTickets() {
+    console.log("Starting to create tickets...")
+    try {
 
+    } catch (error) {
+        console.error("Error while creating tickets")
+        console.error("The error: ", error)
+        throw error
+    }
+}
 
 
 
