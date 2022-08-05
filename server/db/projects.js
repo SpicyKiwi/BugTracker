@@ -10,8 +10,6 @@ async function createProject({title, owner, status}) {
             RETURNING *;
         `, [title, owner, status])
 
-        //console.log("The Projectssss: ", project)
-
         await connectOwnerToProject({username: owner, project_name: title})
 
         return project
@@ -22,7 +20,7 @@ async function createProject({title, owner, status}) {
 }
 
 async function connectOwnerToProject({username, project_name}) {
-    // helper function
+    // helper function (used when a user create a project)
     try {
 
         const {rows: [projectOwner]} = await client.query(`
@@ -31,8 +29,6 @@ async function connectOwnerToProject({username, project_name}) {
             RETURNING *;
         `, [username, project_name, "4"])
 
-        //console.log("Uhhhhh something idrk what this is: ", projectOwner)
-
         return projectOwner
 
     } catch (error) {
@@ -40,14 +36,33 @@ async function connectOwnerToProject({username, project_name}) {
     }
 }
 
-async function getAllProjectUsers() {
+async function addUserToProject({username, project_name, access_level}) {
     try {
 
         const {rows: [projectUser]} = await client.query(`
+            INSERT INTO project_users(username, project_name, access_level)
+            VALUES($1, $2, $3)
+            RETURNING *;
+        `, [username, project_name, access_level])
+
+        console.log("PROJECT USER!: ", projectUser)
+
+        return projectUser
+
+    } catch (error) {
+
+    }
+}
+
+async function getAllProjectUsers() {
+    // helper function (used to view all connections between users/projects)
+    try {
+
+        const {rows: projectUser} = await client.query(`
             SELECT * FROM project_users;
         `)
 
-        console.log(projectUser)
+        //console.log("Project User!!!!!: ", projectUser)
 
         return projectUser
 
@@ -57,5 +72,7 @@ async function getAllProjectUsers() {
 }
 
 module.exports = {
-    createProject
+    createProject,
+    getAllProjectUsers,
+    addUserToProject
 }

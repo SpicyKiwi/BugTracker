@@ -2,7 +2,9 @@ const client = require('./client.js')
 
 const {
     createUser,
-    createProject
+    createProject,
+    getAllProjectUsers,
+    addUserToProject
 } = require('./')
 
 async function dropTables() {
@@ -115,6 +117,9 @@ async function createInitialProjects() {
         console.log("Projects Created: ")
         console.log(projects)
         console.log("Finished creating the projects!")
+
+        console.log("HERE!!!!!!!!!")
+        await getAllProjectUsers()
 
     } catch (error) {
         console.error("Error while creating projects!")
