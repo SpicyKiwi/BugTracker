@@ -4,7 +4,9 @@ const {
     createUser,
     createProject,
     getAllProjectUsers,
-    addUserToProject
+    addUserToProject,
+    createTicket,
+    assignUserToTicket
 } = require('./')
 
 async function dropTables() {
@@ -157,14 +159,16 @@ async function createInitialTickets() {
     console.log("Starting to create tickets...")
     try {
 
+        // const ticketsToCreate = [
+        //     {title: "", short_description: "", full_description: "", status: "", project_title: "farhan's project", creator: ""}
+        // ]
+
     } catch (error) {
         console.error("Error while creating tickets")
         console.error("The error: ", error)
         throw error
     }
 }
-
-
 
 async function rebuildDB() {
     try {

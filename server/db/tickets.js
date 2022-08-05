@@ -20,6 +20,24 @@ async function createTicket({title, short_description, full_description, status,
     }
 }
 
+async function assignUserToTicket({ticketId, assigned_user}) {
+    try {
+
+        const {rows: [updatedTicket]} = await client.query(`
+            UPDATE tickets
+            SET assigned_user=$1
+            WHERE tickets.id=$2
+            RETURNING *;
+        `, [assigned_user, ticketId])
+
+        return updatedTicket
+
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
-    createTicket
+    createTicket,
+    assignUserToTicket
 }
