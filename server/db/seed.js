@@ -109,7 +109,7 @@ async function createInitialProjects() {
 
         const projectsToCreate = [
             {title: "Test Project", owner: "TestAccount1", status: "New!"},
-            {title: "farhan's project", owner: "fanjum1", status: "Working!"},
+            {title: "farhan's project", owner: "fanjum1", status: "New!"},
         ]
 
         const projects = await Promise.all(projectsToCreate.map(createProject))
@@ -117,9 +117,6 @@ async function createInitialProjects() {
         console.log("Projects Created: ")
         console.log(projects)
         console.log("Finished creating the projects!")
-
-        console.log("HERE!!!!!!!!!")
-        await getAllProjectUsers()
 
     } catch (error) {
         console.error("Error while creating projects!")
@@ -132,8 +129,22 @@ async function assignInitialUsersToProjects() {
     console.log("Starting to assign users to projects...")
     try {
 
-        
+        const usersToAssign = [
+            {username: "The_One", project_name: "Test Project", access_level: "3"},
+            {username: "TestAccount1", project_name: "farhan's project", access_level: "1"},
+            {username: "The_One", project_name: "farhan's project", access_level: "3"}
+        ]
 
+        const assignedUsers = await Promise.all(usersToAssign.map(addUserToProject))
+
+        console.log("User's assigned: ")
+        console.log(assignedUsers)
+        console.log("Finished assigning users to projects!")
+
+
+        console.log("Here are the users assigned to projects!")
+        const proUser = await getAllProjectUsers()
+        console.log(proUser)
 
     } catch (error) {
         console.error("Error while assigning initial users to projects")
@@ -141,6 +152,8 @@ async function assignInitialUsersToProjects() {
         throw error
     }
 }
+
+
 
 
 
@@ -153,6 +166,7 @@ async function rebuildDB() {
         await createTables()
         await createInitialUsers()
         await createInitialProjects()
+        await assignInitialUsersToProjects()
 
 
         console.log("RebuildDB function was successful!")
