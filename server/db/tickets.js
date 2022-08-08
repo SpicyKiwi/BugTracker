@@ -8,7 +8,7 @@ async function createTicket({title, short_description, full_description, status,
         // the selected user will get assigned to the newly created ticket.
 
         const {rows:[ticket]} = await client.query(`
-            INSERT INTO tickets(title, short_description, full_description, status, project_title, creator, assigned_user)
+            INSERT INTO tickets(title, short_description, full_description, status, project_title, creator)
             VALUES($1, $2, $3, $4, $5, $6)
             RETURNING *;
         `, [title, short_description, full_description, status, project_title, creator])

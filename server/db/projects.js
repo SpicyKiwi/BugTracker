@@ -45,8 +45,6 @@ async function addUserToProject({username, project_name, access_level}) {
             RETURNING *;
         `, [username, project_name, access_level])
 
-        console.log("PROJECT USER!: ", projectUser)
-
         return projectUser
 
     } catch (error) {
@@ -61,8 +59,6 @@ async function getAllProjectUsers() {
         const {rows: projectUser} = await client.query(`
             SELECT * FROM project_users;
         `)
-
-        //console.log("Project User!!!!!: ", projectUser)
 
         return projectUser
 

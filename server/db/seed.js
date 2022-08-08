@@ -15,6 +15,8 @@ async function dropTables() {
 
         await client.query(`
 
+        DROP TABLE IF EXISTS old_tickets;
+        DROP TABLE IF EXISTS old_projects;
         DROP TABLE IF EXISTS project_users;
         DROP TABLE IF EXISTS tickets;
         DROP TABLE IF EXISTS projects;
@@ -70,6 +72,24 @@ async function createTables() {
             project_title VARCHAR(255) REFERENCES projects(title),
             creator VARCHAR(255) REFERENCES users(username) NOT NULL,
             assigned_user VARCHAR(255)
+        );
+
+        CREATE TABLE old_projects(
+            id SERIAL PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            owner VARCHAR(255) NOT NULL,
+            status VARCHAR(255) NOT NULL
+        );
+
+        CREATE TABLE old_tickets(
+            id SERIAL PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            short_description VARCHAR(255),
+            full_description VARCHAR(255) NOT NULL,
+            status VARCHAR(255) NOT NULL,
+            project_title VARCHAR(255),
+            creator VARCHAR(255) REFERENCES users(username) NOT NULL,
+            completed_by VARCHAR(255)
         );
 
         `)
@@ -159,9 +179,29 @@ async function createInitialTickets() {
     console.log("Starting to create tickets...")
     try {
 
-        // const ticketsToCreate = [
-        //     {title: "", short_description: "", full_description: "", status: "", project_title: "farhan's project", creator: ""}
-        // ]
+        const ticketsToCreate = [
+            {title: "Submit Button", short_description: "won't let me submit!", full_description: "Fix submit button on the information page", status: "1", project_title: "farhan's project", creator: "fanjum1" },
+            {title: "TicketTitle", short_description: "short description", full_description: "this is the full description. All the details can go here", status: "1", project_title: "Test Project", creator: "TestAccount1" },
+            {title: "Wake them up", short_description: "red pill distribution", full_description: "Neo, we need your help! Give red pills to everyone and unplug them from the system!", status: "2", project_title: "farhan's project", creator: "fanjum1" },
+            {title: "Add background color", short_description: "", full_description: "Add a back ground color to the page. Any color will be fine", status: "3", project_title: "Test Project", creator: "TestAccount1" }
+        ]
+
+        const tickets = await Promise.all(ticketsToCreate.map(createTicket))
+
+        console.log("Created Tickets: ")
+        console.log(tickets)
+
+
+        const usersToAssignToTicket = [
+            {ticketId: 1, assigned_user: ""},
+            {ticketId: 2, assigned_user: ""},
+            {ticketId: 3, assigned_user: "The_One"},
+            {ticketId: 4, assigned_user: "The_One"}
+        ]
+
+        const usersAssignedToTickets = await Promise.all(usersToAssignToTicket.map(assignUserToTicket))
+        console.log("Assigned users to tickets: ")
+        console.log(usersAssignedToTickets)
 
     } catch (error) {
         console.error("Error while creating tickets")
@@ -180,6 +220,7 @@ async function rebuildDB() {
         await createInitialUsers()
         await createInitialProjects()
         await assignInitialUsersToProjects()
+        await createInitialTickets()
 
 
         console.log("RebuildDB function was successful!")
