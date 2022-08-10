@@ -6,7 +6,8 @@ const genericError = { error: "Something went wrong! Try again"}
 usersRouter.use(express.json())
 
 const {
-    getAllUsers
+    getAllUsers,
+    getUserByUsername
 } = require('../db')
 
 usersRouter.use((req, res, next) => {
@@ -19,6 +20,17 @@ usersRouter.get("/", async (req, res, next) => {
     try {
         const users = await getAllUsers()
         res.send(users)
+    } catch (error) {
+        res.status(500).send(genericError)
+    }
+})
+
+usersRouter.get("/:username", async (req, res, next) => {
+    const {username} = req.params
+    try {
+        const user = await getUserByUsername(username)
+
+        res.send(user)
     } catch (error) {
         res.status(500).send(genericError)
     }
