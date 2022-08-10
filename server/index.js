@@ -9,8 +9,8 @@ const client = require('./db/client')
 const morgan = require('morgan')
 server.use(morgan('dev'))
 
-// const cors = require('cors')
-// server.use(cors())
+const cors = require('cors')
+server.use(cors())
 
 const bodyParser = require('body-parser')
 server.use(bodyParser.json())

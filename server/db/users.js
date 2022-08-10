@@ -25,7 +25,7 @@ async function createUser({username, email, password, first_name, last_name, pro
     }
 }
 
-async function getUsers() {
+async function getAllUsers() {
     try {
         
         const { rows: [users] } = await client.query(`
@@ -41,5 +41,5 @@ async function getUsers() {
 
 module.exports = {
     createUser,
-    getUsers
+    getAllUsers
 }
