@@ -28,7 +28,7 @@ async function createUser({username, email, password, first_name, last_name, pro
 async function getAllUsers() {
     try {
         
-        const { rows: [users] } = await client.query(`
+        const { rows: users } = await client.query(`
             select * from users;
         `)
 
