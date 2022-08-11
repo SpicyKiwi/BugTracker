@@ -12,6 +12,9 @@ apiRouter.get('/', (req, res, next) => {
 const {usersRouter} = require('./users.js')
 apiRouter.use('/users', usersRouter)
 
+const {projectsRouter} = require('./projects.js')
+apiRouter.use('/projects', projectsRouter)
+
 apiRouter.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(500).send(err)

@@ -55,7 +55,7 @@ async function addUserToProject({username, project_name, access_level}) {
 async function getAllProjects() {
     try {
 
-        const {rows: [projects]} = await client.query(`
+        const {rows: projects} = await client.query(`
             SELECT * FROM projects;
         `)
 
