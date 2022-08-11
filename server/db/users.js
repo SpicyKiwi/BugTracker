@@ -47,8 +47,6 @@ async function getUserByUsername(username) {
             WHERE username=$1;
         `, [username])
 
-        console.log("USER: ", user)
-
         return user
 
     } catch (error) {

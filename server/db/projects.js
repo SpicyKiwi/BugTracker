@@ -52,6 +52,20 @@ async function addUserToProject({username, project_name, access_level}) {
     }
 }
 
+async function getAllProjects() {
+    try {
+
+        const {rows: [projects]} = await client.query(`
+            SELECT * FROM projects;
+        `)
+
+        return projects
+
+    } catch (error) {
+        throw error
+    }
+}
+
 async function getAllProjectUsers() {
     // helper function (used to view all connections between users/projects)
     try {
@@ -70,5 +84,6 @@ async function getAllProjectUsers() {
 module.exports = {
     createProject,
     getAllProjectUsers,
-    addUserToProject
+    addUserToProject,
+    getAllProjects
 }
