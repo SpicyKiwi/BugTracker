@@ -18,6 +18,8 @@ async function createUser({username, email, password, first_name, last_name, pro
             RETURNING *;
         `, [username, email, password, first_name, last_name, profile_picture])
 
+        console.log(user)
+        if (user === undefined) return {error: "Something went wrong. Try a different email!"}
         return user
         
     } catch (error) {

@@ -7,7 +7,8 @@ usersRouter.use(express.json())
 
 const {
     getAllUsers,
-    getUserByUsername
+    getUserByUsername,
+    createUser
 } = require('../db')
 
 usersRouter.use((req, res, next) => {
@@ -20,6 +21,20 @@ usersRouter.get("/", async (req, res, next) => {
     try {
         const users = await getAllUsers()
         res.send(users)
+    } catch (error) {
+        res.status(500).send(genericError)
+    }
+})
+
+usersRouter.post("/register", async (req, res, next) => {
+    //create a user
+    const {username, email, password, first_name, last_name, profile_picture} = req.body
+    try{
+
+        const user = await createUser({username, email, password, first_name, last_name, profile_picture})
+
+        res.send(user)
+
     } catch (error) {
         res.status(500).send(genericError)
     }
