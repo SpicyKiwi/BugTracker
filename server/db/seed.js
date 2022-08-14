@@ -15,8 +15,6 @@ async function dropTables() {
 
         await client.query(`
 
-        DROP TABLE IF EXISTS old_tickets;
-        DROP TABLE IF EXISTS old_projects;
         DROP TABLE IF EXISTS project_users;
         DROP TABLE IF EXISTS tickets;
         DROP TABLE IF EXISTS projects;
@@ -52,7 +50,10 @@ async function createTables() {
             id SERIAL PRIMARY KEY,
             title VARCHAR(255) UNIQUE NOT NULL,
             owner VARCHAR(255) REFERENCES users(username) ON UPDATE CASCADE,
-            status VARCHAR(255) NOT NULL
+            status VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            last_updated TIMESTAMP WITH TIME ZONE,
+            completed_at TIMESTAMP WITH TIME ZONE
         );
 
         CREATE TABLE project_users(
@@ -61,7 +62,6 @@ async function createTables() {
             project_name VARCHAR(255) REFERENCES projects(title) ON UPDATE CASCADE,
             access_level VARCHAR(255) NOT NULL
         );
-
 
         CREATE TABLE tickets(
             id SERIAL PRIMARY KEY,
@@ -72,24 +72,6 @@ async function createTables() {
             project_title VARCHAR(255) REFERENCES projects(title),
             creator VARCHAR(255) REFERENCES users(username) NOT NULL,
             assigned_user VARCHAR(255)
-        );
-
-        CREATE TABLE old_projects(
-            id SERIAL PRIMARY KEY,
-            title VARCHAR(255) NOT NULL,
-            owner VARCHAR(255) NOT NULL,
-            status VARCHAR(255) NOT NULL
-        );
-
-        CREATE TABLE old_tickets(
-            id SERIAL PRIMARY KEY,
-            title VARCHAR(255) NOT NULL,
-            short_description VARCHAR(255),
-            full_description VARCHAR(255) NOT NULL,
-            status VARCHAR(255) NOT NULL,
-            project_title VARCHAR(255),
-            creator VARCHAR(255) REFERENCES users(username) NOT NULL,
-            completed_by VARCHAR(255)
         );
 
         `)
@@ -130,8 +112,8 @@ async function createInitialProjects() {
     try {
 
         const projectsToCreate = [
-            {title: "Test Project", owner: "TestAccount1", status: "New!"},
-            {title: "farhan's project", owner: "fanjum1", status: "New!"},
+            {title: "Test Project", owner: "TestAccount1", status: "In Progress..."},
+            {title: "farhan's project", owner: "fanjum1", status: "In Progress..."},
         ]
 
         const projects = await Promise.all(projectsToCreate.map(createProject))

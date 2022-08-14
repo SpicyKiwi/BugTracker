@@ -6,7 +6,8 @@ const genericError = { error: "Something went wrong! Try again"}
 projectsRouter.use(express.json())
 
 const {
-    getAllProjects
+    getAllProjects,
+    createProject
 } = require('../db')
 
 projectsRouter.use((req, res, next) => {
@@ -17,9 +18,21 @@ projectsRouter.use((req, res, next) => {
 projectsRouter.get("/", async (req, res, next) => {
     //get all projects
     try {
-        const users = await getAllProjects()
+        const projects = await getAllProjects()
 
-        res.send(users)
+        res.send(projects)
+    } catch (error) {
+        res.status(500).send(genericError)
+    }
+})
+
+projectsRouter.post("/", async (req, res, next) => {
+    //create a project
+    const {title, owner, status} = req.body
+    try {
+        const project = await createProject({title, owner, status})
+        res.send(project)
+
     } catch (error) {
         res.status(500).send(genericError)
     }

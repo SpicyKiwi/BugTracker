@@ -31,10 +31,16 @@ usersRouter.post("/register", async (req, res, next) => {
     const {username, email, password, first_name, last_name, profile_picture} = req.body
     try{
 
-        const user = await createUser({username, email, password, first_name, last_name, profile_picture})
+        if (!profile_picture) { 
+            const user = await createUser({username, email, password, first_name, last_name, profile_picture: "DefaultPFP"})
+            res.send(user)
+        } else {
+            const user = await createUser({username, email, password, first_name, last_name, profile_picture})
+            res.send(user)
+        }
 
-        res.send(user)
 
+ 
     } catch (error) {
         res.status(500).send(genericError)
     }
